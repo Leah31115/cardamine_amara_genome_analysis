@@ -1,14 +1,14 @@
 # *Cardamine amara* genome analysis
 ## Contents
-[Overview](https://github.com/Leah31115/cardamine_amara_genome_analysis/edit/main/README.md#overview) <br/>
-[Install conda](https://github.com/Leah31115/cardamine_amara_genome_analysis/edit/main/README.md#install-conda) <br/>
+[Overview](https://github.com/Leah31115/cardamine_amara_genome_analysis/main/README.md#overview) <br/>
+[Install conda](https://github.com/Leah31115/cardamine_amara_genome_analysis/main/README.md#install-conda) <br/>
 ### Diploid *Cardamine amara*
-[Genome annotation]() <br/>
-[Ribosomal RNA annotation]() <br/>
-[Transposonable element annotation]() <br/>
-[Telomere annotation]() <br/>
-[Tandem repeat annotation]() <br/>
-[Genome visualisation]()
+[Genome annotation](https://github.com/Leah31115/cardamine_amara_genome_analysis/main/README.md#genome-annotation) <br/>
+[Ribosomal RNA annotation](https://github.com/Leah31115/cardamine_amara_genome_analysis/main/README.md#ribosomal-rna-annotation) <br/>
+[Transposonable element annotation](https://github.com/Leah31115/cardamine_amara_genome_analysis/main/README.md#transposonable-element-annotation) <br/>
+[Telomere annotation](https://github.com/Leah31115/cardamine_amara_genome_analysis/main/README.md#telomere-annotation) <br/>
+[Tandem repeat annotation](https://github.com/Leah31115/cardamine_amara_genome_analysis/main/README.md#tandem-repeat-annotation) <br/>
+[Genome visualisation](https://github.com/Leah31115/cardamine_amara_genome_analysis/main/README.md#genome-visualisation)
 
 ## Overview
 LIFE4136 rotation 3 group project. The aims of this project are to investigate and compare the genomic structure of diploid *Cardamine amara* genomes.
