@@ -14,7 +14,8 @@ Analyse orthology and synteny <br/>
   - [Generate protein fasta files]() <br/>
   - [Convert gff file to bed file]() <br/>
 - [Orthofinder]() <br/>
-[Contributors](#contributors)
+
+[Contributors](#contributors) 
 
 ## Overview
 University of Nottingham module LIFE4136 rotation 3 group project. The aims of this project are to investigate and compare the genomic structure of diploid *Cardamine amara* genomes. Levi Yant and his team provided two assembled *C. amara* haplome fasta files, each containing eight scaffolds/chromosomes, for analysis.
@@ -26,18 +27,16 @@ If conda is not already installed into Ubuntu, please follow the steps [here](ht
 ### Genome annotation
 To annotate the entire *Cardamine amara* genome, the [Augustus](https://github.com/Gaius-Augustus/Augustus/tree/master) tool can be used. First, set up an augustus environment within Ubuntu. 
 ```bash
-conda create augustus
+conda create -n augustus -c bioconda augustus=3.1
 conda activate augustus
-conda install -c bioconda augustus=3.1
 ```
 Generate genome annotations using the [augustus_annotate_haplomes.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/augustus_annotate_haplomes.sh) script.
 
 ### Ribosomal RNA annotation
 [Barrnap](https://github.com/tseemann/barrnap) can be used to annotate the *Cardamine amara* ribosomal RNA genes. First, set up a barrnap environment within Ubuntu.
 ```bash
-conda create barrnap
+conda create -n barrnap -c bioconda -c conda-forge barrnap
 conda activate barrnap
-conda install -c bioconda -c conda-forge barrnap
 ```
 Follow the [source steps](https://github.com/tseemann/barrnap?tab=readme-ov-file#source) to install barrnap. Then generate an rRNA annotation gff3 file using the [barrnap_annotate_rrna.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/barrnap_annotate_rrna.sh) script.
 
@@ -66,13 +65,13 @@ conda create --name genespace4 orthofinder=2.5.5 mcscanx r-base=4.4.1 r-devtools
 conda activate genespace4
 ```
 
-Next clone this github and the GENESPACE github into your working directory. Then copy the c_amara_genespace.r and c_amara_data.sh scripts to the GENESPACE directory
+Next clone this github and the GENESPACE github into your working directory. Then copy the [c_amara_genespace.r](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/c_amara_genespace.r) and [genespace.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/genespace.sh) scripts to the GENESPACE directory.
 ```bash
 git clone https://github.com/jtlovell/GENESPACE
 git clone https://github.com/Leah31115/cardamine_amara_genome_analysis
 cd cardamine_amara_genome_analysis
 cp c_amara_genespace.r path/to/GENESPACE
-cp c_amara_data.sh path/to/GENESPACE
+cp genespace.sh path/to/GENESPACE
 ```
 
 You will also need to copy your protein.fa files and only the first four columns of your .bed files into the GENESPACE directory.
@@ -89,7 +88,7 @@ cut -f1-4 path/to/cardamine_amara_genome_analysis/bedtools/hap1.bed > path/to/GE
 cut -f1-4 path/to/cardamine_amara_genome_analysis/bedtools/hap2.bed > path/to/GENESPACE/bed/hap2.bed
 ```
 
-Our peptide bed files contained parent gene names. To make the geneID names within the genome bed files match the peptide files, '.t1' was added to the end of each bed file line. If your geneID names match the protein fasta gene names, skip this step. Else, replace the .t1 with whatever suffix is required, providing all gene names will have exactly this suffix.
+Our peptide bed files contained parent gene names. To make the geneID names within the genome bed files match the peptide files, '.t1' was added to the end of each bed file line. If your geneID names match the protein fasta gene names, skip this step. Else, replace the .t1 with whatever suffix is required, providing all gene names will have this exact suffix.
 ```bash
 cd path/to/GENESPACE/bed
 sed -i "s/$/.t1/" hap1.bed
@@ -97,9 +96,22 @@ sed -i "s/$/.t1/" hap2.bed
 ```
 
 Thank you Laura Dean for providing genespace example code.
+
 ##### Convert .gff to .bed
+The genome annotation .gff3 file generated from [Augustus](#genome-annotation) can be converted to a .bed file using [bedtools](https://github.com/daler/pybedtools?tab=readme-ov-file). Create a conda bedtools environment using the code:
+```bash
+conda create -n bedtools python=3.12 anaconda::pandas bioconda::pybedtools
+conda activate bedtools
+conda install -c bioconda gff2bed
+```
+Move into the bedtools directory and run the [convert_gff2bed.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/bedtools/convert_gff2bed.sh) script to generate .bed files. Change any root directory paths within the [gff2bed.py](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/bedtools/gff2bed.py) and convert_gff2bed.sh scripts, as needed, to match your working directory.
+```bash
+cd path/to/cardamine_amara_genome_analysis/bedtools
+sbatch convert_gff2bed.sh
+```
 
 ##### Generate protein fasta file
+
 
 #### Orthofinder
 
