@@ -9,16 +9,17 @@
 [Centromere and Telomere prediction](#centromere-and-telomere-prediction) <br/>
 [Tandem repeat annotation](#tandem-repeat-annotation) <br/>
 [Genome visualisation](#genome-visualisation) <br/>
+[Analyse protein function](#) <br/>
 Analyse orthology and synteny <br/>
-- [Genespace]()<br/>
-  - [Generate protein fasta files]() <br/>
-  - [Convert gff file to bed file]() <br/>
+- [Genespace](#genespace)<br/>
+  - [Convert gff file to bed file](convert-.gff-to-.bed) <br/>
+  - [Generate protein fasta files](generate-protein-fasta-file) <br/>
 - [Orthofinder]() <br/>
 
 [Contributors](#contributors) 
 
 ## Overview
-University of Nottingham module LIFE4136 rotation 3 group project. The aims of this project are to investigate and compare the genomic structure of diploid *Cardamine amara* genomes. Levi Yant and his team provided two assembled *C. amara* haplome fasta files, each containing eight scaffolds/chromosomes, for analysis.
+University of Nottingham module LIFE4136 rotation 3 group project. The aims of this project are to investigate and compare the genomic structure of diploid *Cardamine amara* genomes. Levi Yant and his team provided two *C. amara* haplome assemblies, from one individual, generated from longread pacbio Revio HiFi sequence data, followed by HiC. Each haplome file contained eight scaffolds/chromosomes which were subject to analysis.
 
 ## Install conda
 If conda is not already installed into Ubuntu, please follow the steps [here](https://docs.conda.io/projects/conda/en/stable/user-guide/install/linux.html) to install conda.
@@ -55,6 +56,18 @@ Analyse the telomeres, using only your genome fasta files, with the [quarTeT_tel
 ### Tandem repeat annotation
 The tool [TRASH](https://github.com/vlothec/TRASH) can be used to annotate tandem repeats. Create a conda environment, here we named ours TRASH2, and install TRASH following the TRASH installer steps [here](https://github.com/vlothec/TRASH?tab=readme-ov-file#installation).
 
+### Analyse protein function
+BLAST can be used to investigate the potential function of proteins expressed within the genome. This requires a protein fasta file to be already made which is achievable following these [steps](generate-protein-fasta-file). Create a BLAST conda environment.
+```bash
+conda create -n BLAST bioconda::blast
+conda activate BLAST
+```
+From our Moddotplot data output, we identified blocks of interest (BOI) within the haplome 1 scaffold 5 and haplome 2 scaffold 2. Therefore, we filtered our protein.fa file for these BOI regions using the commands below. Adjust the region of interest values according to your specific areas of interest. Alternatively, you can skip this filter step and run BLAST on the entire protein.fa file if you are interested in the protein function of the entire haplome.
+```bash
+sed -n '31045,47299p' hap1.fa > hap1_rl5block_protein.fasta
+sed -n '26711,44990p' hap2.fa > hap2_rl2block_protein.fasta
+```
+
 ### Analyse orthology and synteny
 #### Genespace
 [Genespace](https://github.com/jtlovell/GENESPACE) can be used to analyse orthology and synteny within your genome files. Files required to run this tool are genome.bed and protein.fa files. If you do not already have these, please read below which explains how to generate these required files.
@@ -70,22 +83,22 @@ Next clone this github and the GENESPACE github into your working directory. The
 git clone https://github.com/jtlovell/GENESPACE
 git clone https://github.com/Leah31115/cardamine_amara_genome_analysis
 cd cardamine_amara_genome_analysis
-cp c_amara_genespace.r path/to/GENESPACE
-cp genespace.sh path/to/GENESPACE
+cp c_amara_genespace.r /path/to/GENESPACE
+cp genespace.sh /path/to/GENESPACE
 ```
 
 You will also need to copy your protein.fa files and only the first four columns of your .bed files into the GENESPACE directory.
 ```bash
 # Copy protein fasta files
-cp path/to/hap1.fasta path/to/GENESPACE/peptide
-cp path/to/hap2.fasta path/to/GENESPACE/peptide
+cp /path/to/hap1.fasta path/to/GENESPACE/peptide
+cp /path/to/hap2.fasta path/to/GENESPACE/peptide
 
 # Copy genome bed files
 cd path/to/GENESPACE
 mkdir bed
 mkdir peptide
-cut -f1-4 path/to/cardamine_amara_genome_analysis/bedtools/hap1.bed > path/to/GENESPACE/bed/hap1.bed
-cut -f1-4 path/to/cardamine_amara_genome_analysis/bedtools/hap2.bed > path/to/GENESPACE/bed/hap2.bed
+cut -f1-4 /path/to/cardamine_amara_genome_analysis/bedtools/hap1.bed > /path/to/GENESPACE/bed/hap1.bed
+cut -f1-4 /path/to/cardamine_amara_genome_analysis/bedtools/hap2.bed > /path/to/GENESPACE/bed/hap2.bed
 ```
 
 Our peptide bed files contained parent gene names. To make the geneID names within the genome bed files match the peptide files, '.t1' was added to the end of each bed file line. If your geneID names match the protein fasta gene names, skip this step. Else, replace the .t1 with whatever suffix is required, providing all gene names will have this exact suffix.
@@ -106,14 +119,15 @@ conda install -c bioconda gff2bed
 ```
 Move into the bedtools directory and run the [convert_gff2bed.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/bedtools/convert_gff2bed.sh) script to generate .bed files. Change any root directory paths within the [gff2bed.py](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/bedtools/gff2bed.py) and convert_gff2bed.sh scripts, as needed, to match your working directory.
 ```bash
-cd path/to/cardamine_amara_genome_analysis/bedtools
+cd /path/to/cardamine_amara_genome_analysis/bedtools
 sbatch convert_gff2bed.sh
 ```
 
 ##### Generate protein fasta file
-
+The [gffread](https://github.com/gpertea/gffread) tool can be used to translate the genome sequence into a protein fasta file. [Install](https://github.com/gpertea/gffread#installation) gffread as described in their github. If you do not already have a genome annotation file, generate one using [Augustus](#genome-annotation) before running the [gffread.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/gffread.sh) script.
 
 #### Orthofinder
+
 
 ### Genome visualisation
 The [ModDotPlot](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#about) tool enables genome visualisation by producing an identity heatmap.
