@@ -14,7 +14,8 @@ Analyse orthology and synteny <br/>
 - [Genespace](#genespace)<br/>
   - [Convert gff file to bed file](convert-.gff-to-.bed) <br/>
   - [Generate protein fasta files](generate-protein-fasta-file) <br/>
-- [Orthofinder]() <br/>
+- [Orthofinder](#orthofinder) <br/>
+  - [Filter genome fasta files](#filter-genome-fasta-files) <br/>
 
 [Contributors](#contributors) 
 
@@ -127,7 +128,15 @@ sbatch convert_gff2bed.sh
 The [gffread](https://github.com/gpertea/gffread) tool can be used to translate the genome sequence into a protein fasta file. [Install](https://github.com/gpertea/gffread#installation) gffread as described in their github. If you do not already have a genome annotation file, generate one using [Augustus](#genome-annotation) before running the [gffread.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/gffread.sh) script.
 
 #### Orthofinder
+##### Filter genome fasta files
+Before using orthofinder, a conda environment must first be set up to use Samtools.
+```bash
+conda create -n samtools bioconda::samtools
+conda activate samtools
+```
+[Samtools](https://github.com/samtools/samtools) was used to filter the genome fasta files for the chromosomes of interest (haplome 1 chromosome 5 and haplome 2 chromosome 2) as well as the blocks of interest (BOIs) within these chromosomes using the [samtools.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/samtools.sh) script. 
 
+The filtered file outputs from the samtools were supplied to the [Orthofinder](https://github.com/davidemms/OrthoFinder) tool to identify *C. amara* orthologues within the chromosomes of interest and BOIs.
 
 ### Genome visualisation
 The [ModDotPlot](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#about) tool enables genome visualisation by producing an identity heatmap.
@@ -138,6 +147,7 @@ The [ModDotPlot](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#about) t
   - Moddotplot
   - QuarTeT
   - EDTA
+  - Samtools
   - Orthofinder
   - BLAST
   - Gffread
