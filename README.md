@@ -2,6 +2,7 @@
 ## Contents
 [Overview](#overview) <br/>
 [Install conda](#install-conda) <br/>
+[Clone github repository](#clone-github-repository) <br/>
 ### Diploid *Cardamine amara* analysis
 [Genome annotation](#genome-annotation) <br/>
 [Ribosomal RNA annotation](#ribosomal-rna-annotation) <br/>
@@ -9,7 +10,6 @@
 [Centromere and Telomere prediction](#centromere-and-telomere-prediction) <br/>
 [Tandem repeat annotation](#tandem-repeat-annotation) <br/>
 [Genome visualisation](#genome-visualisation) <br/>
-[Analyse protein function](#) <br/>
 Analyse orthology and synteny <br/>
 - [Genespace](#genespace)<br/>
   - [Convert gff file to bed file](convert-.gff-to-.bed) <br/>
@@ -17,13 +17,29 @@ Analyse orthology and synteny <br/>
 - [Orthofinder](#orthofinder) <br/>
   - [Filter genome fasta files](#filter-genome-fasta-files) <br/>
 
-[Contributors](#contributors) 
+[Analyse protein function](#) <br/>
+
+[Contributors](#contributors) <br/>
+[References](#references)
 
 ## Overview
 University of Nottingham module LIFE4136 rotation 3 group project. The aims of this project are to investigate and compare the genomic structure of diploid *Cardamine amara* genomes. Levi Yant and his team provided two *C. amara* haplome assemblies, from one individual, generated from longread pacbio Revio HiFi sequence data, followed by HiC. Each haplome file contained eight scaffolds/chromosomes which were subject to analysis.
 
 ## Install conda
 If conda is not already installed into Ubuntu, please follow the steps [here](https://docs.conda.io/projects/conda/en/stable/user-guide/install/linux.html) to install conda.
+
+## Clone github repository
+Clone this github repository into your working directory.
+
+git clone https://github.com/Leah31115/cardamine_amara_genome_analysis
+```bash
+cd cardamine_amara_genome_analysis
+```
+
+Make a logs directory to store any job submission .out and .error files.
+```bash
+mkdir logs
+```
 
 ## Diploid *Cardamine amara*
 ### Genome annotation
@@ -32,7 +48,11 @@ To annotate the entire *Cardamine amara* genome, the [Augustus](https://github.c
 conda create -n augustus -c bioconda augustus=3.1
 conda activate augustus
 ```
-Generate genome annotations using the [augustus_annotate_haplomes.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/augustus_annotate_haplomes.sh) script.
+Generate genome annotations using the [augustus_annotate_haplomes.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/augustus_annotate_haplomes.sh) script. Filter the annotations for chromosomes of interest using the commands below. If you wish to filter other chromosomes of interest from the .gff annotation file, adjust the chromosome name (e.g. RL_5 or RL_2) and the file output name accordingly.
+```bash
+cat c_amara_hap1.gff3 | grep "^RL_5" > aug_hap1_rl5.gff3
+cat c_amara_hap2.gff3 | grep "^RL_2" > aug_hap2_rl2.gff3
+```
 
 ### Ribosomal RNA annotation
 [Barrnap](https://github.com/tseemann/barrnap) can be used to annotate the *Cardamine amara* ribosomal RNA genes. First, set up a barrnap environment within Ubuntu.
@@ -57,18 +77,6 @@ Analyse the telomeres, using only your genome fasta files, with the [quarTeT_tel
 ### Tandem repeat annotation
 The tool [TRASH](https://github.com/vlothec/TRASH) can be used to annotate tandem repeats. Create a conda environment, here we named ours TRASH2, and install TRASH following the TRASH installer steps [here](https://github.com/vlothec/TRASH?tab=readme-ov-file#installation).
 
-### Analyse protein function
-BLAST can be used to investigate the potential function of proteins expressed within the genome. This requires a protein fasta file to be already made which is achievable following these [steps](generate-protein-fasta-file). Create a BLAST conda environment.
-```bash
-conda create -n BLAST bioconda::blast
-conda activate BLAST
-```
-From our Moddotplot data output, we identified blocks of interest (BOI) within the haplome 1 scaffold 5 and haplome 2 scaffold 2. Therefore, we filtered our protein.fa file for these BOI regions using the commands below. Adjust the region of interest values according to your specific areas of interest. Alternatively, you can skip this filter step and run BLAST on the entire protein.fa file if you are interested in the protein function of the entire haplome.
-```bash
-sed -n '31045,47299p' hap1.fa > hap1_rl5block_protein.fasta
-sed -n '26711,44990p' hap2.fa > hap2_rl2block_protein.fasta
-```
-
 ### Analyse orthology and synteny
 #### Genespace
 [Genespace](https://github.com/jtlovell/GENESPACE) can be used to analyse orthology and synteny within your genome files. Files required to run this tool are genome.bed and protein.fa files. If you do not already have these, please read below which explains how to generate these required files.
@@ -82,34 +90,32 @@ conda activate genespace4
 Next clone this github and the GENESPACE github into your working directory. Then copy the [c_amara_genespace.r](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/c_amara_genespace.r) and [genespace.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/genespace.sh) scripts to the GENESPACE directory.
 ```bash
 git clone https://github.com/jtlovell/GENESPACE
-git clone https://github.com/Leah31115/cardamine_amara_genome_analysis
-cd cardamine_amara_genome_analysis
-cp c_amara_genespace.r /path/to/GENESPACE
-cp genespace.sh /path/to/GENESPACE
+mv c_amara_genespace.r GENESPACE/
+mv genespace.sh GENESPACE/
 ```
 
 You will also need to copy your protein.fa files and only the first four columns of your .bed files into the GENESPACE directory.
 ```bash
 # Copy protein fasta files
-cp /path/to/hap1.fasta path/to/GENESPACE/peptide
-cp /path/to/hap2.fasta path/to/GENESPACE/peptide
+cp /path/to/cardamine_amara_genome_analysis/gffread/hap1.fasta path/to/cardamine_amara_genome_analysis/GENESPACE/peptide
+cp /path/to/cardamine_amara_genome_analysis/gffread/hap2.fasta path/to/cardamine_amara_genome_analysis/GENESPACE/peptide
 
 # Copy genome bed files
 cd path/to/GENESPACE
 mkdir bed
 mkdir peptide
-cut -f1-4 /path/to/cardamine_amara_genome_analysis/bedtools/hap1.bed > /path/to/GENESPACE/bed/hap1.bed
-cut -f1-4 /path/to/cardamine_amara_genome_analysis/bedtools/hap2.bed > /path/to/GENESPACE/bed/hap2.bed
+cut -f1-4 /path/to/cardamine_amara_genome_analysis/bedtools/hap1.bed > /path/to/cardamine_amara_genome_analysis/GENESPACE/bed/hap1.bed
+cut -f1-4 /path/to/cardamine_amara_genome_analysis/bedtools/hap2.bed > /path/to/cardamine_amara_genome_analysis/GENESPACE/bed/hap2.bed
 ```
 
-Our peptide bed files contained parent gene names. To make the geneID names within the genome bed files match the peptide files, '.t1' was added to the end of each bed file line. If your geneID names match the protein fasta gene names, skip this step. Else, replace the .t1 with whatever suffix is required, providing all gene names will have this exact suffix.
+Our peptide bed files contained parent gene names. To make the geneID names within the genome bed files match the peptide files, '.t1' was added to the end of each bed file line. If your geneID names match the protein fasta gene names, skip this step. Else, replace the .t1 with whatever suffix is required, providing all gene names have this exact suffix.
 ```bash
 cd path/to/GENESPACE/bed
 sed -i "s/$/.t1/" hap1.bed
 sed -i "s/$/.t1/" hap2.bed
 ```
 
-Thank you Laura Dean for providing genespace example code.
+Thank you Laura Dean for sharing the genespace code and script.
 
 ##### Convert .gff to .bed
 The genome annotation .gff3 file generated from [Augustus](#genome-annotation) can be converted to a .bed file using [bedtools](https://github.com/daler/pybedtools?tab=readme-ov-file). Create a conda bedtools environment using the code:
@@ -132,17 +138,35 @@ The [gffread](https://github.com/gpertea/gffread) tool can be used to translate 
 Before using orthofinder, a conda environment must first be set up to use Samtools.
 ```bash
 conda create -n samtools bioconda::samtools
-conda activate samtools
 ```
 [Samtools](https://github.com/samtools/samtools) was used to filter the genome fasta files for the chromosomes of interest (haplome 1 chromosome 5 and haplome 2 chromosome 2) as well as the blocks of interest (BOIs) within these chromosomes using the [samtools.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/samtools.sh) script. 
-
-The filtered file outputs from the samtools were supplied to the [Orthofinder](https://github.com/davidemms/OrthoFinder) tool to identify *C. amara* orthologues within the chromosomes of interest and BOIs.
+```bash
+sbatch samtools.sh
+```
+The filtered file outputs from the samtools were supplied to the [Orthofinder](https://github.com/davidemms/OrthoFinder) tool to identify *C. amara* orthologues within the chromosomes of interest and BOIs. Create a conda environment to install Orthofinder following their [github](https://github.com/davidemms/OrthoFinder?tab=readme-ov-file#installing-orthofinder-on-linux) instruction. 
 
 ### Genome visualisation
-The [ModDotPlot](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#about) tool enables genome visualisation by producing an identity heatmap.
+The [ModDotPlot](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#about) tool enables genome visualisation by producing an identity heatmap. [Install](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#installation) ModDotPlot as instructed in their github page. Then move the [moddotplot.sh]() script to the cloned ModDotPlot repository and submit the job to visualise genomes your genomes.
+```bash
+mv /path/to/cardamine_amara_genome_analysis/moddotplot.sh ModDotPlot/
+cd ModDotPlot
+sbatch moddotplot.sh
+```
+
+### Analyse protein function
+BLAST can be used to investigate the potential function of proteins expressed within the genome. This requires a protein fasta file to be already made which is achievable following these [steps](generate-protein-fasta-file). Create a BLAST conda environment.
+```bash
+conda create -n BLAST bioconda::blast
+conda activate BLAST
+```
+From our Moddotplot data output, we identified blocks of interest (BOI) within the haplome 1 scaffold 5 and haplome 2 scaffold 2. Therefore, we filtered our protein.fa file for these BOI regions using the commands below. Adjust the region of interest values according to your specific areas of interest. Alternatively, you can skip this filter step and run BLAST on the entire protein.fa file if you are interested in the protein function of the entire haplome.
+```bash
+sed -n '31045,47299p' hap1.fa > hap1_rl5block_protein.fasta
+sed -n '26711,44990p' hap2.fa > hap2_rl2block_protein.fasta
+```
 
 
-### Contributors
+## Contributors
 - [Josh Young](https://github.com/mbxjy4)
   - Moddotplot
   - QuarTeT
@@ -162,4 +186,8 @@ The [ModDotPlot](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#about) t
 - [Shixuan Liu]()
   - Moddotplot  
 - Levi Yant, Rhianah Sandean, Denzel Renner
+  - Supplied genome sequence data
 - Laura Dean
+  - Genespace script
+
+## References
