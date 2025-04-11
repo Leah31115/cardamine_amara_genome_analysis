@@ -31,8 +31,8 @@ If conda is not already installed into Ubuntu, please follow the steps [here](ht
 ## Clone github repository
 Clone this github repository into your working directory.
 
-git clone https://github.com/Leah31115/cardamine_amara_genome_analysis
 ```bash
+git clone https://github.com/Leah31115/cardamine_amara_genome_analysis
 cd cardamine_amara_genome_analysis
 ```
 
