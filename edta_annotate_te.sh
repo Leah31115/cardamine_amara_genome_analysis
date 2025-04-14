@@ -6,9 +6,9 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=50g
 #SBATCH --time=24:00:00
-#SBATCH --job-name=EDTA_c_amara
-#SBATCH --output=/share/BioinfMSc/rot3_group1/logs/%x-%j.out
-#SBATCH --error=/share/BioinfMSc/rot3_group1/logs/%x-%j.err
+#SBATCH --job-name=EDTA
+#SBATCH --output=/path/to/cardamine_amara_genome_analysis/logs/%x-%j.out
+#SBATCH --error=/path/to/cardamine_amara_genome_analysis/logs/%x-%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=youremail@email.com
 
@@ -17,19 +17,19 @@ source $HOME/.bash_profile
 conda activate EDTA
 
 # Move into cloned EDTA github directory
-cd /share/BioinfMSc/rot3_group1/EDTA/EDTA
+cd /path/to/cardamine_amara_genome_analysis/EDTA
 
-# Path to data directory
-c_amara_genome=/share/BioinfMSc/rotation3/cardamine_amara_v0.9
+# Path
+haplome_data_dir=/path/to/cardamine_amara_haplomes
 
 # Annotate transposable elements for haplome 1
-perl EDTA.pl --genome $c_amara_genome/C087_203_mapq_hap1_8.fa \
+perl EDTA.pl --genome $haplome_data_dir/C087_203_mapq_hap1_8.fa \
     --overwrite 1 \
     --anno 1 \
     -t 16
 
 # Annotate transposable elements for haplome 2
-perl EDTA.pl --genome $c_amara_genome/C087_203_mapq_hap2_8.fa \
+perl EDTA.pl --genome $haplome_data_dir/C087_203_mapq_hap2_8.fa \
     --overwrite 1 \
     --anno 1 \
     -t 16
