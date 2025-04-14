@@ -7,8 +7,8 @@
 #SBATCH --mem=20g
 #SBATCH --time=24:00:00
 #SBATCH --job-name=c_amara_genespace
-#SBATCH --output=/share/BioinfMSc/rot3_group1/logs/%x-%j.out
-#SBATCH --error=/share/BioinfMSc/rot3_group1/logs/%x-%j.err
+#SBATCH --output=/path/to/cardamine_amara_genome_analysis/logs/%x-%j.out
+#SBATCH --error=/path/to/cardamine_amara_genome_analysis/logs/%x-%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=youremail@email.com
 
@@ -16,8 +16,8 @@
 source $HOME/.bash_profile
 conda activate genespace4
 
-# Move to the downloaded GENESPACE github working directory
-cd /share/BioinfMSc/rot3_group1/GENESPACE
+# Move to the cloned GENESPACE github working directory
+cd /path/to/cardamine_amara_genome_analysis/GENESPACE
 
 # Run R script for testdata
 Rscript c_amara_genespace.r
