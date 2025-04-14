@@ -7,8 +7,8 @@
 #SBATCH --mem=10g
 #SBATCH --time=05:00:00
 #SBATCH --job-name=samtools
-#SBATCH --output=/share/BioinfMSc/rot3_group1/logs/%x-%j.out
-#SBATCH --error=/share/BioinfMSc/rot3_group1/logs/%x-%j.err
+#SBATCH --output=/path/to/cardamine_amara_genome_analysis/logs/%x-%j.out
+#SBATCH --error=/path/to/cardamine_amara_genome_analysis/logs/%x-%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=youremail@email.com
 
@@ -16,16 +16,16 @@
 source $HOME/.bash_profile
 conda activate samtools
 
-# Make samtools directory in root directory
-cd /share/BioinfMSc/rot3_group1/github/cardamine_amara_genome_analysis
+# Make samtools output directory
+cd /path/to/cardamine_amara_genome_analysis
 mkdir -p Samtools
-work_dir=/share/BioinfMSc/rot3_group1/github/cardamine_amara_genome_analysis/Samtools
+work_dir=/path/to/cardamine_amara_genome_analysis/Samtools
 cd $work_dir
 
 # Copy haplome data to samtools working directory
-genome_dir=/share/BioinfMSc/rotation3/cardamine_amara_v0.9
-cp $genome_dir/C087_203_mapq_hap1_8.fa $work_dir
-cp $genome_dir/C087_203_mapq_hap2_8.fa $work_dir
+haplome_data_dir=/path/to/cardamine_amara_haplomes
+cp $haplome_data_dir/C087_203_mapq_hap1_8.fa $work_dir
+cp $haplome_data_dir/C087_203_mapq_hap2_8.fa $work_dir
 
 # Index haplomes
 samtools faidx C087_203_mapq_hap1_8.fa
