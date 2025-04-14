@@ -7,8 +7,8 @@
 #SBATCH --mem=50g
 #SBATCH --time=24:00:00
 #SBATCH --job-name=augustus_ann_haplomes
-#SBATCH --output=/share/BioinfMSc/rot3_group1/logs/%x-%j.out
-#SBATCH --error=/share/BioinfMSc/rot3_group1/logs/%x-%j.err
+#SBATCH --output=/path/to/cardamine_amara_genome_analysis/logs/%x-%j.out
+#SBATCH --error=/path/to/cardamine_amara_genome_analysis/logs/%x-%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=youremail@email.com
 
@@ -16,14 +16,14 @@
 source $HOME/.bash_profile
 conda activate augustus
 
-# Fasta files
-c_amara_hap1=/share/BioinfMSc/rotation3/cardamine_amara_v0.9/C087_203_mapq_hap1_8.fa
-c_amara_hap2=/share/BioinfMSc/rotation3/cardamine_amara_v0.9/C087_203_mapq_hap2_8.fa
+# Make out_dir
+mkdir -p augustus
 
-# Output directory
-out_dir=/share/BioinfMSc/rot3_group1/Augustus/c_amara
+# File paths
+haplome_data_dir=/path/to/cardamine_amara_haplomes
+out_dir=/path/to/cardamine_amara_genome_analysis/augustus
 
-# Genome annotation for Hap1
+# Annotate haplome1
 augustus --strand=both \
     --gff3=on \
     --protein=on \
@@ -34,9 +34,9 @@ augustus --strand=both \
     --cds=on \
     --exonnames=on \
     --species=arabidopsis \
-    $c_amara_hap1 > $out_dir/c_amara_hap1.gff3
+    $haplome_data_dir/C087_203_mapq_hap1_8.fa > $out_dir/c_amara_hap1.gff3
 
-# Genome annotation for Hap2
+# Annotate haplome2
 augustus --strand=both \
     --gff3=on \
     --protein=on \
@@ -47,7 +47,7 @@ augustus --strand=both \
     --cds=on \
     --exonnames=on \
     --species=arabidopsis \
-    $c_amara_hap2 > $out_dir/c_amara_hap2.gff3
+    $haplome_data_dir/C087_203_mapq_hap2_8.fa > $out_dir/c_amara_hap2.gff3
 
 # Deactivate conda environment
 conda deactivate
