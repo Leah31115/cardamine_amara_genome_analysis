@@ -164,7 +164,7 @@ cp /path/to/cardamine_amara_genome_analysis/gffread/hap1.fasta path/to/cardamine
 cp /path/to/cardamine_amara_genome_analysis/gffread/hap2.fasta path/to/cardamine_amara_genome_analysis/GENESPACE/peptide
 
 # Copy genome bed files
-cd path/to/GENESPACE
+cd path/to/cardamine_amara_genome_analysis/GENESPACE
 mkdir bed
 mkdir peptide
 cut -f1-4 /path/to/cardamine_amara_genome_analysis/bedtools/hap1.bed > /path/to/cardamine_amara_genome_analysis/GENESPACE/bed/hap1.bed
@@ -173,7 +173,7 @@ cut -f1-4 /path/to/cardamine_amara_genome_analysis/bedtools/hap2.bed > /path/to/
 
 Our peptide bed files contained parent gene names. To make the geneID names within the genome bed files match the peptide files, '.t1' was added to the end of each bed file line. If your geneID names match the protein fasta gene names, skip this step. Else, replace the .t1 with whatever suffix is required, providing all gene names have this exact suffix.
 ```bash
-cd path/to/GENESPACE/bed
+cd path/to/cardamine_amara_genome_analysis/GENESPACE/bed
 sed -i "s/$/.t1/" hap1.bed
 sed -i "s/$/.t1/" hap2.bed
 ```
