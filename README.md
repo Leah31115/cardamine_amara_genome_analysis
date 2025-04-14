@@ -15,7 +15,7 @@
 [File converter: gff to bed](#file-converter-gff-to-bed) <br/>
 [Analyse protein function](#analyse-protein-function) <br/>
 Analyse orthology and synteny <br/>
-- [Genespace](#genespace)<br/>
+- [GENESPACE](#genespace)<br/>
 - [OrthoFinder](#orthofinder) <br/>
 ### Acknowledgements
 [Contributors](#contributors) <br/>
@@ -63,7 +63,7 @@ awk '$4 >=  8923034 && $4 <= 19003400' aug_hap2_rl2.gff3 > gene_hap2_rl2block.gf
 ```
 
 ### Ribosomal RNA annotation
-[Barrnap](https://github.com/tseemann/barrnap) version 1 can be used to annotate the *Cardamine amara* ribosomal RNA genes (Seemann, 2013). First, set up a barrnap environment within Ubuntu.
+[barrnap](https://github.com/tseemann/barrnap) version 1 can be used to annotate the *Cardamine amara* ribosomal RNA genes (Seemann, 2013). First, set up a barrnap environment within Ubuntu.
 ```bash
 conda create -n barrnap -c bioconda -c conda-forge barrnap
 conda activate barrnap
@@ -112,7 +112,7 @@ The [gffread](https://github.com/gpertea/gffread) tool version 0.12.7 can be use
 sbatch gffread.sh
 ```
 
-From our Moddotplot data output, we identified blocks of interest (BOI) within the haplome 1 scaffold 5 and haplome 2 scaffold 2. Therefore, we filtered our gffread output haplome protein.fa files for these BOI regions using the commands below. Adjust the region of interest values according to your specific areas of interest, if desired.
+From our ModDotPlot data output, we identified blocks of interest (BOI) within the haplome 1 scaffold 5 and haplome 2 scaffold 2. Therefore, we filtered our gffread output haplome protein.fa files for these BOI regions using the commands below. Adjust the region of interest values according to your specific areas of interest, if desired.
 ```bash
 sed -n '31045,47299p' hap1.fa > hap1_rl5block_protein.fasta
 sed -n '26711,44990p' hap2.fa > hap2_rl2block_protein.fasta
@@ -141,8 +141,8 @@ conda activate BLAST
 ```
 
 ### Analyse orthology and synteny
-#### Genespace
-[Genespace](https://github.com/jtlovell/GENESPACE) version 1.2.3 can be used to analyse orthology and synteny within your genome files (Lovell *et al.*, 2022). Files required to run this tool are genome.bed and protein.fa files. If you do not already have these files, you can generate .bed files [here](#convert-.gff-to-.bed) and protein.fa files [here](#translate-genome).
+#### GENESPACE
+[GENESPACE](https://github.com/jtlovell/GENESPACE) version 1.2.3 can be used to analyse orthology and synteny within your genome files (Lovell *et al.*, 2022). Files required to run this tool are genome.bed and protein.fa files. If you do not already have these files, you can generate .bed files [here](#convert-.gff-to-.bed) and protein.fa files [here](#translate-genome).
 
 Firstly, create a conda environment.
 ```bash
@@ -182,7 +182,7 @@ Thank you Laura Dean for sharing the genespace code and script.
 
 
 #### OrthoFinder
-Before using OrthoFinder, [Samtools](https://github.com/samtools/samtools) version 1.21 was used to filter the genome fasta files for the chromosomes of interest (haplome 1 chromosome 5 and haplome 2 chromosome 2) as well as the blocks of interest (BOIs) within these chromosomes (Danecek *et al.*, 2021). First, set up a conda environment and then submit the [samtools.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/samtools.sh) script as a job.
+Before using OrthoFinder, [samtools](https://github.com/samtools/samtools) version 1.21 was used to filter the genome fasta files for the chromosomes of interest (haplome 1 chromosome 5 and haplome 2 chromosome 2) as well as the blocks of interest (BOIs) within these chromosomes (Danecek *et al.*, 2021). First, set up a conda environment and then submit the [samtools.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/samtools.sh) script as a job.
 ```bash
 conda create -n samtools bioconda::samtools
 sbatch samtools.sh
@@ -217,27 +217,27 @@ sbatch orthofinder.sh
 ## Acknowledgements
 ### Contributors
 - [Josh Young](https://github.com/mbxjy4)
-  - Moddotplot
-  - QuarTeT
+  - ModDotPlot
+  - quarTeT
   - EDTA
-  - Samtools
-  - Orthofinder
-  - BLAST
-  - Gffread
+  - samtools
+  - OrthoFinder
+  - BLASTp
+  - gffread
 - [Leah Ellis](https://github.com/Leah31115)
-  - Ausustus
-  - Moddotplot
+  - Augustus
+  - ModDotPlot
   - TRASH
-  - Barrnap
-  - Gffread
-  - Bedtools
-  - Genespace
+  - barrnap
+  - gffread
+  - bedtools
+  - GENESPACE
 - [Shixuan Liu](https://github.com/alysl56)
-  - Moddotplot  
+  - ModDotPlot  
 - Levi Yant, Rhianah Sandean, Denzel Renner
   - Supplied *C. amara* genome sequence data and *A. thaliana* proteome data
 - [Laura Dean](https://github.com/lldean18)
-  - Genespace script
+  - GENESPACE script
 
 ### References
 - Camacho, C., Coulouris, G., Avagyan, V., Ma, N., Papadopoulos, J., Bealer, K. and Madden, T.L. (2009). BLAST+: architecture and applications. BMC Bioinformatics, 10(1), p.421.
