@@ -4,8 +4,8 @@ from pathlib import Path
 from pybedtools import BedTool
 
 # File paths
-hap1 = Path("/share/BioinfMSc/rot3_group1/Augustus/c_amara/c_amara_hap1.gff3")
-hap2 = Path("/share/BioinfMSc/rot3_group1/Augustus/c_amara/c_amara_hap2.gff3")
+hap1 = Path("/path/to/cardamine_amara_genome_analysis/augustus/c_amara_hap1.gff3")
+hap2 = Path("/path/to/cardamine_amara_genome_analysis/augustus/c_amara_hap2.gff3")
 
 
 # Convert gff to bed

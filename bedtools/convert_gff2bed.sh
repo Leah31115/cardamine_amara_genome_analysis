@@ -7,8 +7,8 @@
 #SBATCH --mem=20g
 #SBATCH --time=24:00:00
 #SBATCH --job-name=gff2bed
-#SBATCH --output=/share/BioinfMSc/rot3_group1/logs/%x-%j.out
-#SBATCH --error=/share/BioinfMSc/rot3_group1/logs/%x-%j.err
+#SBATCH --output=/path/to/cardamine_amara_genome_analysis/logs/%x-%j.out
+#SBATCH --error=/path/to/cardamine_amara_genome_analysis/logs/%x-%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=youremail@email.com
 
@@ -17,7 +17,7 @@ source $HOME/.bash_profile
 conda activate bedtools
 
 # Change to working directory
-cd /share/BioinfMSc/rot3_group1/bedtools
+cd /path/to/cardamine_amara_genome_analysis/bedtools
 
 # Convert gff to bed
 python gff2bed.py
