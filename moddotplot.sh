@@ -13,16 +13,19 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=youremail@email.com
 
-# Source bash profile for ModDotPlot venv
-source $HOME/.bash_profile
+# Source environment for ModDotPlot venv
+cd /path/to/cardamine_amara_genome_analysis/ModDotPlot # Move to cloned github ModDotPlot repository
+source venv/bin/activate
 
 # Paths
-haplome_data_dir=/path/to/cardamine_amara_haplomes
+chromosome_pairs_dir=/path/to/cardamine_amara_genome_analysis/Samtools
 out_dir=/path/to/cardamine_amara_genome_analysis/ModDotPlot
 
 # Generate identity maps for the entire genome
-moddotplot static -f $haplome_dir/C087_203_mapq_hap1_8.fa --compare -o $out_dir/haplome1
-moddotplot static -f $haplome_dir/C087_203_mapq_hap2_8.fa --compare -o $out_dir/haplome2
+for n in {1..8};
+do
+    moddotplot static -f $chromosome_pairs_dir/h1rl${n}_h2rl${n}.fasta --compare -o $out_dir/chrom${n}
+done
 
 # Deactivate conda
 conda deactivate
