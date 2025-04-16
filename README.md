@@ -111,7 +111,7 @@ Analyse the telomeres, using only your genome fasta files, with the [quarTeT_tel
 sbatch quarTeT_teloexplorer.sh
 ```
 ### Tandem repeat annotation
-The tool [TRASH](https://github.com/vlothec/TRASH) version 1 can be used to annotate tandem repeats (Wlodzimierz, Hong, and Henderson, 2023). Create a conda environment, here we named ours TRASH2, and install TRASH following the TRASH installer steps [here](https://github.com/vlothec/TRASH?tab=readme-ov-file#installation). Next, submit the (trash.sh)[https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/trash.sh] script as a job.
+The tool [TRASH](https://github.com/vlothec/TRASH) version 1 can be used to annotate tandem repeats (Wlodzimierz, Hong, and Henderson, 2023). Create a conda environment, here we named ours TRASH2, and install TRASH following the TRASH installer steps [here](https://github.com/vlothec/TRASH?tab=readme-ov-file#installation). Next, submit the [trash.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/trash.sh) script as a job.
 ```bash
 sbatch trash.sh
 ```
