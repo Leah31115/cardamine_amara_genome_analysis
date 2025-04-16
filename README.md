@@ -79,6 +79,23 @@ sbatch barrnap_annotate_rrna.sh
 sbatch edta_annotate_te.sh
 ```
 
+The output annotation files can be filtered for the chromosomes of interest and blocks of interest (BOI). Adjust chromosome names and BOI values according to your interests, if suitable.
+
+```bash
+# Move into cloned EDTA github directory
+cd /path/to/cardamine_amara_genome_analysis/EDTA
+
+# Create new .txt file with only RL_5 TEs from the EDTA output .gff3 file for haplome 1
+awk '$1 == "RL_5"' C087_203_mapq_hap1_8.fa.mod.EDTA.TEanno.gff3 > te_hap1_rl5.txt
+# Create new .txt file with only RL_5 TEs in the BOI of te_hap1_rl5.txt
+'$4 >= 16000000 && $4 <= 23979000' te_hap1_rl5.txt > te_hap1_rl5_block.txt
+
+# Create new .txt file with only RL_2 TEs from the EDTA output .gff3 file for haplome 2
+awk '$1 == "RL_2"' C087_203_mapq_hap2_8.fa.mod.EDTA.TEanno.gff3 > te_hap2_rl2.txt
+# Create new .txt file with only RL_2 TEs in the BOI of te_hap2_rl2.txt
+'$4 >= 8923000 && $4 <= 19004000' te_hap2_rl2.txt > te_hap2_rl2_block.txt
+```
+
 ### Centromere and Telomere prediction
 [quarTeT](https://github.com/aaranyue/quarTeT) version 1.2.5 was used to analyse analyse the centromeres and telomeres of our haplome data (Lin *et al.*, 2023). First create a conda environment, we named ours quarTeT, by following the [steps](https://github.com/aaranyue/quarTeT?tab=readme-ov-file#dependencies) as demonstrated in the quarTeT github page.
 
