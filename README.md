@@ -117,9 +117,24 @@ sbatch trash.sh
 ```
 
 ### Genome visualisation
-The [ModDotPlot](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#about) tool version 0.9.3 enables genome visualisation by producing an identity heatmap (Sweeten, Schatz, and Phillippy, 2024). [Install](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#installation) ModDotPlot as instructed in their github page. Submit the [moddotplot.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/moddotplot.sh) script as a job where the output files will be located in the cloned ModDotPlot github directory.
+The [ModDotPlot](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#about) tool version 0.9.3 enables genome visualisation by producing an identity heatmap (Sweeten, Schatz, and Phillippy, 2024). [Install](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#installation) ModDotPlot as instructed in their github page. Since ModDotPlot compares the first two chromosomes in the submitted fasta file, [samtools](https://github.com/samtools/samtools) version 1.21 can be used to pair the chromosomes from each haplome together which can then be supplied to ModDotPlot for full genome coverage (Danecek *et al.*, 2021). First, set up a conda samtools environment and then submit the [pair_chromosomes.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/pair_chromosomes.sh) script to generate chromosome pairs in the form of fasta files.
+```bash
+conda create -n samtools bioconda::samtools
+sbatch pair_chromosomes.sh
+```
+
+Next, provide the paired chromosome fasta files to ModDotPlot by submitting the [moddotplot.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/moddotplot.sh) script as a job where the output visualisation files for each chromosome will be located in the cloned ModDotPlot github directory.
 ```bash
 sbatch moddotplot.sh
+```
+
+From our generated chromosome identity heatmaps, we discovered interesting blocks of interest (BOIs) on haplome 1 chromosome 5 and haplome 2 chromosome 2. For further inspection into these regions, SamTools can subset the haplome fasta files into the chromosomes of interest and their BOIs by submitting the [samtools.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/samtools.sh) script.
+```bash
+sbatch samtools.sh
+```
+ModDotPlot can be run to visualise the BOIs by submitting the [moddotplot_regions_of_interest.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/moddotplot_regions_of_interest.sh) script.
+```bash
+sbatch moddotplot_regions_of_interest.sh
 ```
 
 ### Translate genome
@@ -154,7 +169,10 @@ sbatch convert_gff2bed.sh
 [BLASTp](https://github.com/ncbi/blast_plus_docs) version 1 can be used to investigate the potential function of proteins expressed within the genome (Camacho *et al.*, 2009). This requires a protein fasta file to be already made which is achievable following these [steps](generate-protein-fasta-file). Create a BLAST conda environment.
 ```bash
 conda create -n BLAST bioconda::blast
-conda activate BLAST
+```
+Submit the [blast.sh]() script to generate text files of all the genes for the BOIs within the haplome 1 chromosome 5 and haplome 2 chromosome 2
+```bash
+sbatch blast.sh
 ```
 
 ### Analyse orthology and synteny
@@ -199,12 +217,7 @@ Thank you Laura Dean for sharing the genespace code and script.
 
 
 #### OrthoFinder
-Before using OrthoFinder, [samtools](https://github.com/samtools/samtools) version 1.21 was used to filter the genome fasta files for the chromosomes of interest (haplome 1 chromosome 5 and haplome 2 chromosome 2) as well as the blocks of interest (BOIs) within these chromosomes (Danecek *et al.*, 2021). First, set up a conda environment and then submit the [samtools.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/samtools.sh) script as a job.
-```bash
-conda create -n samtools bioconda::samtools
-sbatch samtools.sh
-```
-The filtered file outputs from the samtools were supplied to the [Orthofinder](https://github.com/davidemms/OrthoFinder) version 2.5.5 tool to identify *C. amara* orthologues within the chromosomes of interest and BOIs (Emms and Kelly, 2019). Create a conda environment to install Orthofinder following their [github](https://github.com/davidemms/OrthoFinder?tab=readme-ov-file#installing-orthofinder-on-linux) instruction. To run OrthoFinder, you supply a directory containing both the *C. amara* haplome protein fasta file (which can be generated [here](#translate-genome)) and the *A. thaliana* proteome text file. Since our focus is on hap1_rl5 BOI and hap2_rl2_BOI, we supplied the protein fasta files of these regions only. However, the tool is not limited to these areas and you can supply other protein fasta files suited to your interests. Set up the OrthoFinder input directories by copying the necessary data to these individual directories by using the following commands. 
+See [here](#genome-visualisation) to set up a samtools conda environment and run the [samtool.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/samtools.sh) script if you haven't already done so. The filtered file outputs from the samtool.sh script are supplied to the [Orthofinder](https://github.com/davidemms/OrthoFinder) version 2.5.5 tool to identify *C. amara* orthologues within the chromosomes of interest and BOIs (Emms and Kelly, 2019). Create a conda environment to install Orthofinder following their [github](https://github.com/davidemms/OrthoFinder?tab=readme-ov-file#installing-orthofinder-on-linux) instruction. To run OrthoFinder, you supply a directory containing both the *C. amara* haplome protein fasta file (which can be generated [here](#translate-genome)) and the *A. thaliana* proteome text file. Since our focus is on hap1_rl5 BOI and hap2_rl2_BOI, we supplied the protein fasta files of these regions only. However, the tool is not limited to these areas and you can supply other protein fasta files suited to your interests. Set up the OrthoFinder input directories by copying the necessary data to these individual directories by using the following commands. 
 
 ```bash
 mkdir orthofinder
