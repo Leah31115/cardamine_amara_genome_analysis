@@ -12,8 +12,9 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=youremail@email.com
 
-# Source bash profile for ModDotPlot venv
-source $HOME/.bash_profile
+# Source environment for ModDotPlot venv
+cd /path/to/cardamine_amara_genome_analysis/ModDotPlot # Move to cloned github ModDotPlot repository
+source venv/bin/activate
 
 # Paths
 subset_haplome_dir=/path/to/cardamine_amara_genome_analysis/SamTools
