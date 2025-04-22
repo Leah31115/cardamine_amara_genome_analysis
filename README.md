@@ -190,7 +190,7 @@ Code provided by Josh Young.
 
 ### Analyse orthology and synteny
 #### GENESPACE
-[GENESPACE](https://github.com/jtlovell/GENESPACE) version 1.2.3 can be used to analyse orthology and synteny within your genome files (Lovell *et al.*, 2022). Files required to run this tool are genome.bed and protein.fa files. If you do not already have these files, you can generate bed files [here](#convert-.gff-to-.bed) and protein.fa files [here](#translate-genome).
+[GENESPACE](https://github.com/jtlovell/GENESPACE) version 1.2.3 can be used to analyse orthology and synteny within your genome files (Lovell *et al.*, 2022). Files required to run this tool are genome.bed and protein.fa files. If you do not already have these files, you can generate bed files [here](#file-converter-gff-to-bed) and protein.fa files [here](#translate-genome).
 
 Firstly, create a conda environment.
 ```bash
