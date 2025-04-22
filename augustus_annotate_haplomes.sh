@@ -4,7 +4,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
-#SBATCH --mem=30g
+#SBATCH --mem=15g
 #SBATCH --time=24:00:00
 #SBATCH --job-name=augustus_ann_haplomes
 #SBATCH --output=/path/to/cardamine_amara_genome_analysis/logs/%x-%j.out
