@@ -177,7 +177,7 @@ sbatch convert_gff2bed.sh
 ```
 
 ### Analyse protein function
-[BLASTp](https://github.com/ncbi/blast_plus_docs) version 1 can be used to investigate the potential function of proteins expressed within the genome (Camacho *et al.*, 2009). A protein fasta file is required as input which can be made following these [steps](generate-protein-fasta-file) if not already aquired. Create a BLAST conda environment.
+[BLASTp](https://github.com/ncbi/blast_plus_docs) version 1 can be used to investigate the potential function of proteins expressed within the genome (Camacho *et al.*, 2009). A protein fasta file is required as input which can be made following these [steps](#translate-genome) if not already aquired. Create a BLAST conda environment.
 ```bash
 conda create -n BLAST bioconda::blast
 ```
