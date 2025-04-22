@@ -20,8 +20,8 @@ conda activate barrnap
 cd /path/to/cardamine_amara_genome_analysis/barrnap/bin
 
 # Paths
-haplome_data_dir=/path/to/cardamine_amara_haplomes/C087_203_mapq_hap1_8.fa
-out_dir=/path/to/cardamine_amara_genome_analysis/barrnap/bin
+haplome_data_dir=/path/to/cardamine_amara_haplomes
+out_dir=/path/to/cardamine_amara_genome_analysis/barrnap
 
 # Annotate rRNA genes for haplome 1
 ./barrnap --quiet \
