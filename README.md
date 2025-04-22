@@ -95,9 +95,18 @@ awk '$1 == "RL_2"' C087_203_mapq_hap2_8.fa.mod.EDTA.TEanno.gff3 > te_hap2_rl2.tx
 # Create new .txt file with only RL_2 TEs in the BOI of te_hap2_rl2.txt
 '$4 >= 8923000 && $4 <= 19004000' te_hap2_rl2.txt > te_hap2_rl2_block.txt
 ```
+Gene counts of each TE and TE class total percentage for a given file can be calculated and outputted as a text file using the following command. Replace X with the name of the file you wish to count. We used C087_203_mapq_hap1_8.fa.mod.EDTA.TEanno.gff3, C087_203_mapq_hap2_8.fa.mod.EDTA.TEanno.gff3, te_hap1_rl5.txt, te_hap2_rl2.txt, te_hap1_rl5_block.txt, te_hap1_rl5_block.txt as input. Replace Y with the name of the file name you wish to create e.g. hap1_TE_counts.txt.
+```bash
+awk '$3 ~ /[^[:space:]]/ {count[$3]++; total++}
+END {
+    for (item in count)
+        printf "%.2f%% %s (%d times)\n", (count[item] / total) * 100, item, count[item]
+}' 'X' | sort -nr > 'Y'.txt
+```
+Code provided by Josh Young.
 
 ### Centromere and Telomere prediction
-[quarTeT](https://github.com/aaranyue/quarTeT) version 1.2.5 was used to analyse analyse the centromeres and telomeres of our haplome data (Lin *et al.*, 2023). First create a conda environment, we named ours quarTeT, by following the [steps](https://github.com/aaranyue/quarTeT?tab=readme-ov-file#dependencies) as demonstrated in the quarTeT github page.
+[quarTeT](https://github.com/aaranyue/quarTeT) version 1.2.5 was used to analyse analyse the centromeres and telomeres of our haplome data (Lin *et al.*, 2023). First create a conda environment, we named ours quarTeT, by following the [steps](https://github.com/aaranyue/quarTeT?tab=readme-ov-file#dependencies) as demonstrated in the quarTeT github page. quarTeT code was provided by Josh Young.
 
 #### Centromere prediction
 Before quarTeT is used to predict centromere candidates, please generate the TE annotation file from [EDTA](#transposonable-element-annotation) and the genome annotation file from [Augustus](#genome-annotation). Once both of these files are obtained, run the [quarTeT_centrominer.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/quarTeT_centrominer.sh) script to analyse the centromeres in your data.
@@ -137,6 +146,8 @@ ModDotPlot can be run to visualise the BOIs by submitting the [moddotplot_region
 sbatch moddotplot_regions_of_interest.sh
 ```
 
+Code provided by Josh Young, Leah Ellis, and Shixuan Liu.
+
 ### Translate genome
 The [gffread](https://github.com/gpertea/gffread) tool version 0.12.7 can be used to translate the genome sequence to generate a protein fasta file (Pertea and Pertea, 2020). [Install](https://github.com/gpertea/gffread#installation) gffread as described in their github. If you do not already have a genome annotation file, generate one using [Augustus](#genome-annotation) before running the [gffread.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/gffread.sh) script using the following command.
 
@@ -151,6 +162,7 @@ sed -n '26711,44990p' hap2.fa > hap2_rl2block_protein.fasta
 ```
 
 The protein fasta files can be supplied to the following tools Genespace, OrthoFinder, and BLAST orthology and synteny analysis.
+Code provided by Josh Young and Leah Ellis.
 
 ### File converter: gff to bed
 The genome annotation .gff3 file generated from [Augustus](#genome-annotation) can be converted to a .bed file using [bedtools](https://github.com/daler/pybedtools?tab=readme-ov-file). Create a conda bedtools environment using the code:
@@ -166,14 +178,16 @@ sbatch convert_gff2bed.sh
 ```
 
 ### Analyse protein function
-[BLASTp](https://github.com/ncbi/blast_plus_docs) version 1 can be used to investigate the potential function of proteins expressed within the genome (Camacho *et al.*, 2009). This requires a protein fasta file to be already made which is achievable following these [steps](generate-protein-fasta-file). Create a BLAST conda environment.
+[BLASTp](https://github.com/ncbi/blast_plus_docs) version 1 can be used to investigate the potential function of proteins expressed within the genome (Camacho *et al.*, 2009). A protein fasta file is required as input which can be made following these [steps](generate-protein-fasta-file) if not already aquired. Create a BLAST conda environment.
 ```bash
 conda create -n BLAST bioconda::blast
 ```
-Submit the [blast.sh]() script to generate text files of all the genes for the BOIs within the haplome 1 chromosome 5 and haplome 2 chromosome 2
+Submit the [blast.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/blast.sh) script to generate text files of all the genes for the BOIs within the haplome 1 chromosome 5 and haplome 2 chromosome 2
 ```bash
 sbatch blast.sh
 ```
+
+Code provided by Josh Young.
 
 ### Analyse orthology and synteny
 #### GENESPACE
@@ -213,11 +227,11 @@ sed -i "s/$/.t1/" hap1.bed
 sed -i "s/$/.t1/" hap2.bed
 ```
 
-Thank you Laura Dean for sharing the genespace code and script.
+GENESPACE code and script provided by Laura Dean and adapted by Leah Ellis.
 
 
 #### OrthoFinder
-See [here](#genome-visualisation) to set up a samtools conda environment and run the [samtool.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/samtools.sh) script if you haven't already done so. The filtered file outputs from the samtool.sh script are supplied to the [Orthofinder](https://github.com/davidemms/OrthoFinder) version 2.5.5 tool to identify *C. amara* orthologues within the chromosomes of interest and BOIs (Emms and Kelly, 2019). Create a conda environment to install Orthofinder following their [github](https://github.com/davidemms/OrthoFinder?tab=readme-ov-file#installing-orthofinder-on-linux) instruction. To run OrthoFinder, you supply a directory containing both the *C. amara* haplome protein fasta file (which can be generated [here](#translate-genome)) and the *A. thaliana* proteome text file. Since our focus is on hap1_rl5 BOI and hap2_rl2_BOI, we supplied the protein fasta files of these regions only. However, the tool is not limited to these areas and you can supply other protein fasta files suited to your interests. Set up the OrthoFinder input directories by copying the necessary data to these individual directories by using the following commands. 
+See [here](#genome-visualisation) to set up a samtools conda environment and run the [samtool.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/samtools.sh) script if you haven't already done so. The filtered file outputs from the samtool.sh script are supplied to the [Orthofinder](https://github.com/davidemms/OrthoFinder) version 2.5.5 tool to identify *C. amara* orthologues within the chromosomes of interest and BOIs (Emms and Kelly, 2019). Create a conda environment to install Orthofinder following their [github](https://github.com/davidemms/OrthoFinder?tab=readme-ov-file#installing-orthofinder-on-linux) instruction. To run OrthoFinder, you supply a directory containing both the *C. amara* haplome protein fasta file (which can be generated [here](#translate-genome)) and the *A. thaliana* proteome text file. Since our focus is on haplome 1 chromosome 5 BOI and haplome 2 chromosome 2 BOI, we supplied the protein fasta files of these regions only. However, the tool is not limited to these areas and you can supply other protein fasta files suited to your interests if desired. Set up the OrthoFinder input directories by copying the necessary data to these individual directories by using the following commands. 
 
 ```bash
 mkdir orthofinder
@@ -244,6 +258,8 @@ Now run the [orthofinder.sh](https://github.com/Leah31115/cardamine_amara_genome
 sbatch orthofinder.sh
 ```
 
+Code provided by Josh Young.
+
 ## Acknowledgements
 ### Contributors
 - [Josh Young](https://github.com/mbxjy4)
@@ -257,6 +273,7 @@ sbatch orthofinder.sh
 - [Leah Ellis](https://github.com/Leah31115)
   - Augustus
   - ModDotPlot
+  - samtools
   - TRASH
   - barrnap
   - gffread
@@ -267,7 +284,7 @@ sbatch orthofinder.sh
 - Levi Yant, Rhianah Sandean, Denzel Renner
   - Supplied *C. amara* genome sequence data and *A. thaliana* proteome data
 - [Laura Dean](https://github.com/lldean18)
-  - GENESPACE script
+  - GENESPACE
 
 ### References
 - Camacho, C., Coulouris, G., Avagyan, V., Ma, N., Papadopoulos, J., Bealer, K. and Madden, T.L. (2009). BLAST+: architecture and applications. BMC Bioinformatics, 10(1), p.421.
