@@ -4,7 +4,7 @@
 #SBATCH --nodes=16
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
-#SBATCH --mem=50g
+#SBATCH --mem=20g
 #SBATCH --time=24:00:00
 #SBATCH --job-name=EDTA
 #SBATCH --output=/path/to/cardamine_amara_genome_analysis/logs/%x-%j.out
