@@ -42,7 +42,7 @@ mkdir logs
 
 ## Diploid *Cardamine amara* haplome analysis
 ### Genome visualisation
-The [ModDotPlot](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#about) tool version 0.9.3 enables genome visualisation by producing an identity heatmap (Sweeten, Schatz, and Phillippy, 2024). [Install](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#installation) ModDotPlot as instructed in their github page. Since ModDotPlot compares the first two chromosomes in the submitted fasta file, [samtools](https://github.com/samtools/samtools) version 1.21 can be used to pair the chromosomes from each haplome together which can then be supplied to ModDotPlot for full genome coverage (Danecek *et al.*, 2021). First, set up a conda samtools environment and then submit the [pair_chromosomes.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/pair_chromosomes.sh) script to generate chromosome pairs in the form of fasta files.
+The [ModDotPlot](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#about) tool version 0.9.3 enables genome visualisation by producing an identity heatmap (Sweeten, Schatz, and Phillippy, 2024). [Install](https://github.com/marbl/ModDotPlot?tab=readme-ov-file#installation) ModDotPlot as instructed in their github page. Since ModDotPlot compares the first two chromosomes in the submitted fasta file, [SAMtools](https://github.com/samtools/samtools) version 1.21 can be used to pair the chromosomes from each haplome together which can then be supplied to ModDotPlot for full genome coverage (Danecek *et al.*, 2021). First, set up a conda samtools environment and then submit the [pair_chromosomes.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/pair_chromosomes.sh) script to generate chromosome pairs in the form of fasta files.
 ```bash
 conda create -n samtools bioconda::samtools
 sbatch pair_chromosomes.sh
@@ -148,7 +148,7 @@ sbatch trash.sh
 ```
 
 ### Translate genome
-The [gffread](https://github.com/gpertea/gffread) tool version 0.12.7 can be used to translate the genome sequence to generate a protein fasta file (Pertea and Pertea, 2020). [Install](https://github.com/gpertea/gffread#installation) gffread as described in their github. If you do not already have a genome annotation file, generate one using [Augustus](#genome-annotation) before running the [gffread.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/gffread.sh) script with the following command:
+The [GffRead](https://github.com/gpertea/gffread) tool version 0.12.7 can be used to translate the genome sequence to generate a protein fasta file (Pertea and Pertea, 2020). [Install](https://github.com/gpertea/gffread#installation) gffread as described in their github. If you do not already have a genome annotation file, generate one using [Augustus](#genome-annotation) before running the [gffread.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/gffread.sh) script with the following command:
 
 ```bash
 sbatch gffread.sh
@@ -229,7 +229,7 @@ GENESPACE code and script provided by Laura Dean and adapted by Leah Ellis.
 
 
 #### OrthoFinder
-Set up a samtools conda environment [here](#genome-visualisation) and run the [samtool.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/samtools.sh) script to generate subset haplome fasta files, if you haven't done so already. The subset fasta file outputs from the samtool.sh script are supplied to the [Orthofinder](https://github.com/davidemms/OrthoFinder) version 2.5.5 tool to identify *C. amara* orthologues within the chromosomes of interest and BOIs (Emms and Kelly, 2019). Create a conda environment to install Orthofinder following their [github](https://github.com/davidemms/OrthoFinder?tab=readme-ov-file#installing-orthofinder-on-linux) instruction. To run OrthoFinder, you supply a directory containing both the *C. amara* haplome protein fasta file (which can be generated [here](#translate-genome)) and the *A. thaliana* proteome text file. Since our focus is on haplome 1 chromosome 5 BOI and haplome 2 chromosome 2 BOI, we supplied the protein fasta files of these regions only. However, the tool is not limited to these areas and you can supply other protein fasta files suited to your interests if desired. Set up the OrthoFinder input directories by copying the necessary data to these individual directories by using the following commands:
+If you haven't done so already, set up a SAMtools conda environment [here](#genome-visualisation) and run the [samtool.sh](https://github.com/Leah31115/cardamine_amara_genome_analysis/blob/main/samtools.sh) script to generate subset haplome fasta files. The subset fasta file outputs from the samtools.sh script are supplied to the [Orthofinder](https://github.com/davidemms/OrthoFinder) version 2.5.5 tool to identify *C. amara* orthologues within the chromosomes of interest and BOIs (Emms and Kelly, 2019). Create a conda environment to install Orthofinder following their [github](https://github.com/davidemms/OrthoFinder?tab=readme-ov-file#installing-orthofinder-on-linux) instruction. To run OrthoFinder, you supply a directory containing both the *C. amara* haplome protein fasta file (which can be generated [here](#translate-genome)) and the *A. thaliana* proteome text file. Since our focus is on haplome 1 chromosome 5 BOI and haplome 2 chromosome 2 BOI, we supplied the protein fasta files of these regions only. However, the tool is not limited to these areas and you can supply other protein fasta files suited to your interests if desired. Set up the OrthoFinder input directories by copying the necessary data to these individual directories by using the following commands:
 
 ```bash
 mkdir orthofinder
@@ -264,17 +264,17 @@ Code provided by Josh Young.
   - ModDotPlot
   - quarTeT
   - EDTA
-  - samtools
+  - SAMtools
   - OrthoFinder
   - BLASTp
-  - gffread
+  - GffRead
 - [Leah Ellis](https://github.com/Leah31115)
   - Augustus
   - ModDotPlot
-  - samtools
+  - SAMtools
   - TRASH
   - barrnap
-  - gffread
+  - GffRead
   - bedtools
   - GENESPACE
 - [Shixuan Liu](https://github.com/alysl56)
